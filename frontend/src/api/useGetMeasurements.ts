@@ -25,7 +25,11 @@ export const useGetMeasurements = () => {
   const status =
     result.some((result) => result.status !== "success") ?? "success";
 
-  return { refetch: refetchAll, data, status };
+  const isRefetching = result.some((result) => result.isRefetching);
+
+  const aiAnalysis = reading.data?.ai_analysis || [];
+
+  return { refetch: refetchAll, data, status, isRefetching, aiAnalysis };
 };
 
 type Reading = Record<string, any>;

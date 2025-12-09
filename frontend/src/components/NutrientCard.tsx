@@ -89,7 +89,7 @@ const DisplayMetadata: Record<Substance, { title: string; icon: JSX.Element }> =
     icon: <Atom {...CommonIconProps} />,
   },
   [Substance.SoilMoisture]: {
-    title: "Soil Moisture",
+    title: "Soil Moisture 1",
     icon: <Cloud {...CommonIconProps} />,
   },
   [Substance.SoilMoisture2]: {

@@ -12,7 +12,28 @@ url = f"https://api.thingspeak.com/channels/{CHANNEL_ID}/feeds.json?api_key={REA
 
 
 app = Flask(__name__)
-CORS(app)
+# Allow CORS for all domains to enable local/Vercel connectivity testing
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+def ai_decision(n, p, k, moisture):
+    decision = []
+
+    if moisture < 500:
+        decision.append("Moisture LOW → Turn ON irrigation")
+    else:
+        decision.append("Moisture OK → Turn OFF irrigation")
+
+    if n < 20:
+        decision.append("Nitrogen LOW → Add Urea")
+    if p < 10:
+        decision.append("Phosphorus LOW → Add DAP")
+    if k < 10:
+        decision.append("Potassium LOW → Add Potash")
+
+    if n > 200 or p > 200 or k > 200:
+        decision.append("NPK VERY HIGH → Stop fertilizing")
+        
+    return decision
 
 @app.route('/api/reading')
 def get_reading():
@@ -25,6 +46,7 @@ def get_reading():
         "soil_moisture": reading.soil_moisture,
         "soil_moisture_2": reading.soil_moisture_2,
         "soil_moisture_2_label": classify_soil_moisture_2(reading.soil_moisture_2),
+        "ai_analysis": ai_decision(reading.nitrogen, reading.phosphorus, reading.potassium, reading.soil_moisture)
     })
 
 @app.route('/api/season')
