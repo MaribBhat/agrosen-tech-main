@@ -2,32 +2,36 @@
     "version": 2,
     "builds": [
         {
-            "src": "wsgi.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb"
-            }
-        },
-        {
             "src": "frontend/package.json",
             "use": "@vercel/static-build",
             "config": {
-                "distDir": "frontend/dist"
+                "distDir": "dist"
             }
+        },
+        {
+            "src": "backend/server.py",
+            "use": "@vercel/python"
         }
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
-            "dest": "wsgi.py"
+            "src": "/api/reading",
+            "dest": "backend/server.py"
+        },
+        {
+            "src": "/api/season",
+            "dest": "backend/server.py"
+        },
+        {
+            "src": "/api/ranges",
+            "dest": "backend/server.py"
+        },
+        {
+            "handle": "filesystem"
         },
         {
             "src": "/(.*)",
-            "dest": "frontend/dist/$1"
+            "dest": "frontend/$1"
         }
-    ],
-    "env": {
-        "FLASK_ENV": "production"
-    },
-    "installCommand": "pip install -r requirements.txt"
+    ]
 }
