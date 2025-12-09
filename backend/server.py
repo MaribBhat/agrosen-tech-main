@@ -14,17 +14,20 @@ url = f"https://api.thingspeak.com/channels/{CHANNEL_ID}/feeds.json?api_key={REA
 app = Flask(__name__)
 CORS(app)
 
+from aimodel import get_ai_reading
+
 @app.route('/api/reading')
 def get_reading():
-    data = requests.get(url).json()
-    reading = parse(data)
+    # Use AI model for real-time data
+    reading = get_ai_reading()
+    
     return jsonify({
-        "nitrogen": reading.nitrogen,
-        "phosphorus": reading.phosphorus,
-        "potassium": reading.potassium,
-        "soil_moisture": reading.soil_moisture,
-        "soil_moisture_2": reading.soil_moisture_2,
-        "soil_moisture_2_label": classify_soil_moisture_2(reading.soil_moisture_2),
+        "nitrogen": reading["nitrogen"],
+        "phosphorus": reading["phosphorus"],
+        "potassium": reading["potassium"],
+        "soil_moisture": reading["soil_moisture"],
+        "soil_moisture_2": reading["soil_moisture_2"],
+        "soil_moisture_2_label": classify_soil_moisture_2(reading["soil_moisture_2"]),
     })
 
 @app.route('/api/season')
