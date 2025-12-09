@@ -1,6 +1,5 @@
 {
-    "buildCommand": "cd frontend && npm install && npm run build",
-    "outputDirectory": "frontend/dist",
+    "version": 2,
     "builds": [
         {
             "src": "backend/server.py",
@@ -9,15 +8,7 @@
     ],
     "routes": [
         {
-            "src": "/api/reading",
-            "dest": "backend/server.py"
-        },
-        {
-            "src": "/api/season",
-            "dest": "backend/server.py"
-        },
-        {
-            "src": "/api/ranges",
+            "src": "/api/(.*)",
             "dest": "backend/server.py"
         }
     ]
